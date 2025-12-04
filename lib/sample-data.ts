@@ -11,9 +11,9 @@ import {
 
 export const sampleUser: User = {
   id: "user-1",
-  email: "john.doe@drexel.edu",
-  full_name: "John Doe",
-  profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+  email: "ethan.bailine@drexel.edu",
+  full_name: "Ethan Bailine",
+  profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ethan",
   headline: "Computer Science Student at Drexel University",
 
   // Career Stage Information
@@ -25,12 +25,12 @@ export const sampleUser: User = {
 
   // Location & Contact
   location: "Philadelphia, PA",
-  skills: ["Python", "React", "Node.js", "Machine Learning", "Data Analysis"],
+  skills: ["Python", "React", "Node.js", "TypeScript", "Data Analysis"],
 
   // Target Opportunities
   target_opportunity_types: ["internship", "co_op"],
   target_industries: ["Technology", "Software"],
-  target_roles: ["Software Engineer", "Data Scientist"],
+  target_roles: ["Software Engineer", "Product Manager"],
 
   // Preferences
   preferred_locations: ["San Francisco", "New York", "Remote"],
@@ -40,8 +40,8 @@ export const sampleUser: User = {
   onboarding_completed: true,
   onboarding_step: 5,
 
-  created_at: "2024-09-15T10:00:00Z",
-  updated_at: "2024-11-23T10:00:00Z"
+  created_at: "2025-09-15T10:00:00Z",
+  updated_at: "2025-12-03T10:00:00Z"
 };
 
 export const sampleConnections: Connection[] = [
@@ -55,13 +55,15 @@ export const sampleConnections: Connection[] = [
     current_company: "Google",
     current_role: "Senior Software Engineer",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-    connection_date: "2023-01-15",
+    connection_date: "2024-01-15",
+    email: "sarah.chen@gmail.com",
+    how_you_know: "Met at Drexel CS career fair, she was on the alumni panel",
     mutual_connections: 4,
     same_school: true,
     same_major: true,
-    intro_likelihood_score: 95,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   },
   {
     id: "conn-2",
@@ -73,13 +75,16 @@ export const sampleConnections: Connection[] = [
     current_company: "Google",
     current_role: "Product Manager",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jennifer",
-    connection_date: "2022-06-20",
+    connection_date: "2024-06-20",
+    email: "jlee.pm@gmail.com",
+    phone: "(215) 555-0123",
+    how_you_know: "Introduced by Professor Williams after INFO 103 guest lecture",
     mutual_connections: 5,
     same_school: true,
     same_major: true,
-    intro_likelihood_score: 98,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   },
   {
     id: "conn-3",
@@ -91,13 +96,14 @@ export const sampleConnections: Connection[] = [
     current_company: "Meta",
     current_role: "Software Engineer",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
-    connection_date: "2023-09-10",
+    connection_date: "2025-09-10",
+    how_you_know: "My older brother's roommate from college",
     mutual_connections: 2,
     same_school: true,
     same_major: false,
-    intro_likelihood_score: 75,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   },
   {
     id: "conn-4",
@@ -109,13 +115,15 @@ export const sampleConnections: Connection[] = [
     current_company: "Meta",
     current_role: "Product Designer",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-    connection_date: "2024-02-14",
+    connection_date: "2025-02-14",
+    email: "emily.wang.design@gmail.com",
+    how_you_know: "Met at Philadelphia Tech Meetup",
     mutual_connections: 6,
     same_school: false,
     same_major: false,
-    intro_likelihood_score: 60,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   },
   {
     id: "conn-5",
@@ -127,13 +135,16 @@ export const sampleConnections: Connection[] = [
     current_company: "Amazon",
     current_role: "Software Development Engineer Intern",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
-    connection_date: "2024-03-05",
+    connection_date: "2025-03-05",
+    email: "davidkim@drexel.edu",
+    phone: "(267) 555-0456",
+    how_you_know: "Classmate in CCI 101, we studied together for finals",
     mutual_connections: 8,
     same_school: true,
     same_major: true,
-    intro_likelihood_score: 85,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   },
   {
     id: "conn-6",
@@ -145,30 +156,32 @@ export const sampleConnections: Connection[] = [
     current_company: "Microsoft",
     current_role: "Data Scientist",
     profile_photo_url: "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa",
-    connection_date: "2023-11-20",
+    connection_date: "2024-11-20",
+    how_you_know: "Speaker at Drexel Women in Tech event",
     mutual_connections: 3,
     same_school: true,
     same_major: false,
-    intro_likelihood_score: 70,
-    created_at: "2024-09-15T10:00:00Z",
-    updated_at: "2024-11-23T10:00:00Z"
+    intro_likelihood_score: 0,
+    created_at: "2025-09-15T10:00:00Z",
+    updated_at: "2025-12-03T10:00:00Z"
   }
 ];
 
-// Updated sample companies with INFO 103 project statuses
+// Updated sample companies with INFO 103 project statuses and deadlines
 export const sampleTargetCompanies: TargetCompany[] = [
   {
     id: "company-1",
     user_id: "user-1",
     company_name: "Google",
-    role: "Product Manager Intern",
-    job_url: "https://careers.google.com/jobs/pm-intern-2025",
+    role: "Software Engineering Intern",
+    job_url: "https://careers.google.com/jobs/swe-intern-2025",
     location: "Mountain View, CA",
-    job_description: "Join Google's PM team for Summer 2025...",
-    required_skills: ["Product Management", "Data Analysis", "Communication", "Technical Skills"],
+    job_description: "Join Google's engineering team for Summer 2025. Work on large-scale distributed systems, machine learning, or consumer products.",
+    required_skills: ["Python", "Java", "Data Structures", "Algorithms"],
     status: "interviewing",
-    created_at: "2024-10-15T10:00:00Z",
-    updated_at: "2024-11-20T14:30:00Z"
+    application_deadline: "2025-12-15",
+    created_at: "2025-10-15T10:00:00Z",
+    updated_at: "2025-12-01T14:30:00Z"
   },
   {
     id: "company-2",
@@ -177,11 +190,12 @@ export const sampleTargetCompanies: TargetCompany[] = [
     role: "Software Engineer Intern",
     job_url: "https://www.metacareers.com/jobs/swe-intern",
     location: "Menlo Park, CA",
-    job_description: "Build the future of connection...",
-    required_skills: ["Python", "Java", "Data Structures", "Algorithms"],
+    job_description: "Build the future of connection. Work on Instagram, WhatsApp, or Reality Labs projects.",
+    required_skills: ["Python", "React", "Data Structures", "Algorithms"],
     status: "applied",
-    created_at: "2024-11-01T10:00:00Z",
-    updated_at: "2024-11-21T09:15:00Z"
+    application_deadline: "2025-12-20",
+    created_at: "2025-11-01T10:00:00Z",
+    updated_at: "2025-11-28T09:15:00Z"
   },
   {
     id: "company-3",
@@ -190,63 +204,68 @@ export const sampleTargetCompanies: TargetCompany[] = [
     role: "Software Development Engineer Intern",
     job_url: "https://amazon.jobs/en/jobs/sde-intern",
     location: "Seattle, WA",
-    job_description: "Work on large-scale distributed systems...",
+    job_description: "Work on large-scale distributed systems powering AWS, retail, or Alexa.",
     required_skills: ["Java", "Python", "System Design", "Problem Solving"],
     status: "thinking",
-    created_at: "2024-11-10T10:00:00Z",
-    updated_at: "2024-11-22T16:45:00Z"
+    application_deadline: "2025-12-31",
+    created_at: "2025-11-10T10:00:00Z",
+    updated_at: "2025-12-02T16:45:00Z"
   },
   {
     id: "company-4",
     user_id: "user-1",
     company_name: "Microsoft",
-    role: "Data Science Intern",
-    job_url: "https://careers.microsoft.com/data-science-intern",
+    role: "Software Engineering Intern",
+    job_url: "https://careers.microsoft.com/swe-intern",
     location: "Redmond, WA",
-    job_description: "Apply ML to real-world problems...",
-    required_skills: ["Python", "R", "Machine Learning", "Statistics"],
+    job_description: "Build products used by billions. Teams include Azure, Office, Windows, Xbox, and more.",
+    required_skills: ["C#", "Python", "Cloud Computing", "TypeScript"],
     status: "applied",
-    created_at: "2024-11-05T10:00:00Z",
-    updated_at: "2024-11-18T11:20:00Z"
+    application_deadline: "2025-12-10",
+    created_at: "2025-11-05T10:00:00Z",
+    updated_at: "2025-11-25T11:20:00Z"
   },
   {
     id: "company-5",
-    user_id: "user-1",
-    company_name: "Goldman Sachs",
-    role: "Technology Analyst Intern",
-    job_url: "https://goldmansachs.com/careers/tech-analyst",
-    location: "New York, NY",
-    job_description: "Build technology that powers global markets...",
-    required_skills: ["Java", "C++", "Finance", "Problem Solving"],
-    status: "interviewing",
-    created_at: "2024-10-25T10:00:00Z",
-    updated_at: "2024-11-19T13:00:00Z"
-  },
-  {
-    id: "company-6",
     user_id: "user-1",
     company_name: "Stripe",
     role: "Software Engineering Intern",
     job_url: "https://stripe.com/jobs/software-intern",
     location: "San Francisco, CA",
-    job_description: "Help build economic infrastructure...",
+    job_description: "Help build economic infrastructure for the internet. Work on payments, APIs, and developer tools.",
     required_skills: ["Ruby", "JavaScript", "APIs", "Databases"],
-    status: "applied",
-    created_at: "2024-10-01T10:00:00Z",
-    updated_at: "2024-10-28T10:00:00Z"
+    status: "thinking",
+    application_deadline: "2025-12-18",
+    created_at: "2025-11-20T10:00:00Z",
+    updated_at: "2025-12-01T10:00:00Z"
+  },
+  {
+    id: "company-6",
+    user_id: "user-1",
+    company_name: "Comcast",
+    role: "Technology Co-op",
+    job_url: "https://jobs.comcast.com/tech-coop",
+    location: "Philadelphia, PA",
+    job_description: "6-month co-op working on streaming technology, network infrastructure, or enterprise software. Great for Drexel students!",
+    required_skills: ["Python", "JavaScript", "SQL", "Agile"],
+    status: "interviewing",
+    application_deadline: "2025-12-08",
+    created_at: "2025-10-25T10:00:00Z",
+    updated_at: "2025-12-03T13:00:00Z"
   },
   {
     id: "company-7",
     user_id: "user-1",
-    company_name: "Salesforce",
-    role: "Product Management Intern",
-    job_url: "https://salesforce.com/careers/pm-intern",
-    location: "San Francisco, CA",
-    job_description: "Drive product strategy for enterprise software...",
-    required_skills: ["Product Management", "Salesforce", "Analytics"],
+    company_name: "Vanguard",
+    role: "Technology Intern",
+    job_url: "https://www.vanguardjobs.com/tech-intern",
+    location: "Malvern, PA",
+    job_description: "Work on fintech solutions for one of the world's largest investment companies. Close to Drexel campus.",
+    required_skills: ["Java", "Python", "Finance", "Data Analysis"],
     status: "rejected",
-    created_at: "2024-09-20T10:00:00Z",
-    updated_at: "2024-10-15T10:00:00Z"
+    application_deadline: "2025-11-15",
+    created_at: "2025-09-20T10:00:00Z",
+    updated_at: "2025-11-20T10:00:00Z"
   }
 ];
 
@@ -260,22 +279,20 @@ export const sampleOutreach: Outreach[] = [
     recipient_linkedin_url: "https://linkedin.com/in/jennifer-lee",
     message_content: `Hi Jennifer,
 
-I saw you're working as a PM at Google Ads—congrats on getting there after Drexel!
+I saw you're working as a PM at Google Ads. Thank you again for your great talk at INFO 103!
 
-I'm a junior at Drexel studying CS, and I'm trying to learn more about the PM internship path, especially since I noticed you transitioned from SWE to PM.
+I'm applying for the SWE intern position at Google and would love to hear about your experience with the interview process.
 
-Would you be open to a 15-min call sometime in the next few weeks to share how you made that transition? I'd love to learn from your experience.
+Would you be open to a 15-min call sometime in the next few weeks?
 
-Thanks either way,
-John Doe
-Drexel CS '26`,
+Thanks,
+Ethan`,
     send_method: "linkedin",
-    status: "intro_made",
-    sent_at: "2024-11-05T09:00:00Z",
-    responded_at: "2024-11-06T14:30:00Z",
-    intro_made_at: "2024-11-15T10:00:00Z",
-    created_at: "2024-11-04T16:00:00Z",
-    updated_at: "2024-11-15T10:00:00Z"
+    status: "responded",
+    sent_at: "2025-11-05T09:00:00Z",
+    responded_at: "2025-11-06T14:30:00Z",
+    created_at: "2025-11-04T16:00:00Z",
+    updated_at: "2025-11-15T10:00:00Z"
   },
   {
     id: "outreach-2",
@@ -286,66 +303,20 @@ Drexel CS '26`,
     recipient_linkedin_url: "https://linkedin.com/in/mike-johnson",
     message_content: `Hey Mike,
 
-Hope you're doing well! I saw you're at Meta now as a Software Engineer.
+Hope you're doing well! I heard from my brother that you're at Meta now.
 
-I'm a CS student at Drexel looking to apply for SWE internships for Summer 2025, and I'd love to learn more about your experience at Meta and what the interview process was like.
+I'm applying for SWE internships for Summer 2025 and would love to learn more about your experience at Meta.
 
-Would you have 15 minutes for a quick call in the next week or two? Happy to work around your schedule.
+Do you have 15 minutes for a quick call?
 
 Best,
-John`,
+Ethan`,
     send_method: "linkedin",
     status: "sent",
-    sent_at: "2024-11-18T10:00:00Z",
-    follow_up_scheduled_at: "2024-11-23T10:00:00Z",
-    created_at: "2024-11-17T15:00:00Z",
-    updated_at: "2024-11-18T10:00:00Z"
-  },
-  {
-    id: "outreach-3",
-    user_id: "user-1",
-    target_company_id: "company-3",
-    connection_id: "conn-5",
-    recipient_name: "David Kim",
-    recipient_linkedin_url: "https://linkedin.com/in/david-kim",
-    message_content: `Hi David,
-
-Congrats on your SDE internship at Amazon! I saw we're both at Drexel studying CS.
-
-I'm applying for Summer 2025 internships and would love to hear about your experience with Amazon's interview process and what it's like working there.
-
-Could we grab coffee on campus sometime next week? I'd really appreciate any advice you can share.
-
-Thanks!
-John`,
-    send_method: "linkedin",
-    status: "draft",
-    created_at: "2024-11-22T14:00:00Z",
-    updated_at: "2024-11-22T14:00:00Z"
-  },
-  {
-    id: "outreach-4",
-    user_id: "user-1",
-    target_company_id: "company-4",
-    connection_id: "conn-6",
-    recipient_name: "Lisa Rodriguez",
-    recipient_linkedin_url: "https://linkedin.com/in/lisa-rodriguez",
-    message_content: `Hi Lisa,
-
-I hope this message finds you well! I saw you're a Data Scientist at Microsoft and also went to Drexel.
-
-I'm really interested in data science internships for next summer and would love to learn more about your path from Drexel to Microsoft.
-
-Would you be open to a 15-minute call sometime in the next few weeks?
-
-Thanks so much,
-John Doe
-Drexel CS '26`,
-    send_method: "linkedin",
-    status: "sent",
-    sent_at: "2024-11-10T11:00:00Z",
-    created_at: "2024-11-09T16:00:00Z",
-    updated_at: "2024-11-10T11:00:00Z"
+    sent_at: "2025-11-28T10:00:00Z",
+    follow_up_scheduled_at: "2025-12-05T10:00:00Z",
+    created_at: "2025-11-27T15:00:00Z",
+    updated_at: "2025-11-28T10:00:00Z"
   }
 ];
 
@@ -353,13 +324,12 @@ export const sampleReminders: Reminder[] = [
   {
     id: "reminder-1",
     user_id: "user-1",
-    outreach_id: "outreach-1",
     target_company_id: "company-1",
-    reminder_type: "send_thank_you",
-    reminder_date: "2024-11-23T10:00:00Z",
-    message: "Send thank you note to Jennifer after she made the intro",
+    reminder_type: "call_prep",
+    reminder_date: "2025-12-05T09:00:00Z",
+    message: "Prepare for Google technical phone screen - review data structures",
     completed: false,
-    created_at: "2024-11-20T10:00:00Z"
+    created_at: "2025-12-01T10:00:00Z"
   },
   {
     id: "reminder-2",
@@ -367,42 +337,41 @@ export const sampleReminders: Reminder[] = [
     outreach_id: "outreach-2",
     target_company_id: "company-2",
     reminder_type: "follow_up",
-    reminder_date: "2024-11-23T10:00:00Z",
-    message: "Follow up with Mike if no response",
+    reminder_date: "2025-12-05T10:00:00Z",
+    message: "Follow up with Mike if no response about Meta",
     completed: false,
-    created_at: "2024-11-18T10:00:00Z"
+    created_at: "2025-11-28T10:00:00Z"
   },
   {
     id: "reminder-3",
     user_id: "user-1",
-    target_company_id: "company-5",
+    target_company_id: "company-6",
     reminder_type: "call_prep",
-    reminder_date: "2024-11-24T09:00:00Z",
-    message: "Prepare for call with Goldman Sachs recruiter tomorrow",
+    reminder_date: "2025-12-06T09:00:00Z",
+    message: "Prepare for Comcast interview - research their streaming tech",
     completed: false,
-    created_at: "2024-11-19T15:00:00Z"
+    created_at: "2025-12-03T15:00:00Z"
   },
   {
     id: "reminder-4",
     user_id: "user-1",
-    outreach_id: "outreach-4",
     target_company_id: "company-4",
     reminder_type: "check_response",
-    reminder_date: "2024-11-20T10:00:00Z",
-    message: "Check if Lisa responded to your message",
+    reminder_date: "2025-12-03T10:00:00Z",
+    message: "Check Microsoft application portal for updates",
     completed: true,
-    completed_at: "2024-11-20T11:00:00Z",
-    created_at: "2024-11-15T10:00:00Z"
+    completed_at: "2025-12-03T11:00:00Z",
+    created_at: "2025-11-30T10:00:00Z"
   },
   {
     id: "reminder-5",
     user_id: "user-1",
     target_company_id: "company-3",
     reminder_type: "follow_up",
-    reminder_date: "2024-11-25T10:00:00Z",
-    message: "Send message to David about Amazon internship",
+    reminder_date: "2025-12-08T10:00:00Z",
+    message: "Finish Amazon application before deadline",
     completed: false,
-    created_at: "2024-11-22T10:00:00Z"
+    created_at: "2025-12-02T10:00:00Z"
   }
 ];
 
@@ -410,75 +379,87 @@ export const sampleTimelineEvents: Record<string, TimelineEvent[]> = {
   "company-1": [
     {
       id: "event-1-1",
-      type: "message_sent",
-      title: "Message sent to Jennifer Lee",
-      description: "Reached out to Jennifer for advice on PM path",
-      date: "2024-11-05T09:00:00Z",
-      metadata: { recipient: "Jennifer Lee" }
+      type: "status_changed",
+      title: "Added to tracker",
+      description: "Started tracking Google SWE internship",
+      date: "2025-10-15T10:00:00Z"
     },
     {
       id: "event-1-2",
-      type: "response_received",
-      title: "Jennifer responded",
-      description: "She's open to a call next week!",
-      date: "2024-11-06T14:30:00Z",
-      metadata: { sender: "Jennifer Lee" }
+      type: "message_sent",
+      title: "Reached out to Jennifer Lee",
+      description: "Asked for advice about Google interview process",
+      date: "2025-11-05T09:00:00Z",
+      metadata: { recipient: "Jennifer Lee" }
     },
     {
       id: "event-1-3",
-      type: "call_scheduled",
-      title: "Call scheduled with Jennifer",
-      description: "15-minute informational interview on Tuesday at 2pm",
-      date: "2024-11-07T10:00:00Z",
-      metadata: { callTime: "2024-11-12T14:00:00Z" }
+      type: "response_received",
+      title: "Jennifer responded",
+      description: "She agreed to a call and shared some tips",
+      date: "2025-11-06T14:30:00Z",
+      metadata: { sender: "Jennifer Lee" }
     },
     {
       id: "event-1-4",
-      type: "note_added",
-      title: "Call completed",
-      description: "Great conversation! Jennifer offered to intro me to Sarah Johnson (PM recruiter)",
-      date: "2024-11-12T14:30:00Z"
+      type: "status_changed",
+      title: "Status updated to Applied",
+      description: "Submitted online application",
+      date: "2025-11-15T10:00:00Z"
     },
     {
       id: "event-1-5",
-      type: "intro_made",
-      title: "Warm introduction made!",
-      description: "Jennifer introduced me to Sarah Johnson, Senior PM Recruiter at Google",
-      date: "2024-11-15T10:00:00Z",
-      metadata: { introducer: "Jennifer Lee", recipient: "Sarah Johnson" }
-    },
-    {
-      id: "event-1-6",
       type: "status_changed",
       title: "Status updated to Interviewing",
-      description: "Path successfully created to hiring manager",
-      date: "2024-11-15T10:05:00Z"
+      description: "Phone screen scheduled for next week!",
+      date: "2025-12-01T14:30:00Z"
     }
   ],
   "company-2": [
     {
       id: "event-2-1",
-      type: "message_sent",
-      title: "Message sent to Mike Johnson",
-      description: "Asked about Meta SWE internship experience",
-      date: "2024-11-18T10:00:00Z",
-      metadata: { recipient: "Mike Johnson" }
+      type: "status_changed",
+      title: "Added to tracker",
+      description: "Started tracking Meta SWE internship",
+      date: "2025-11-01T10:00:00Z"
     },
     {
       id: "event-2-2",
-      type: "note_added",
-      title: "Follow-up scheduled",
-      description: "Will follow up on Nov 23 if no response",
-      date: "2024-11-18T10:05:00Z"
+      type: "status_changed",
+      title: "Status updated to Applied",
+      description: "Application submitted online",
+      date: "2025-11-15T10:00:00Z"
+    },
+    {
+      id: "event-2-3",
+      type: "message_sent",
+      title: "Reached out to Mike Johnson",
+      description: "Asked about Meta interview experience",
+      date: "2025-11-28T10:00:00Z",
+      metadata: { recipient: "Mike Johnson" }
     }
   ],
-  "company-3": [
+  "company-6": [
     {
-      id: "event-3-1",
-      type: "note_added",
-      title: "Draft message created",
-      description: "Ready to send to David Kim (Drexel alum at Amazon)",
-      date: "2024-11-22T14:00:00Z"
+      id: "event-6-1",
+      type: "status_changed",
+      title: "Added to tracker",
+      description: "Started tracking Comcast co-op",
+      date: "2025-10-25T10:00:00Z"
+    },
+    {
+      id: "event-6-2",
+      type: "status_changed",
+      title: "Status updated to Applied",
+      description: "Applied through Drexel Steinbright",
+      date: "2025-11-01T10:00:00Z"
+    },
+    {
+      id: "event-6-3",
+      type: "status_changed",
+      title: "Status updated to Interviewing",
+      description: "Recruiter reached out for interview!",
+      date: "2025-12-03T13:00:00Z"
     }
   ]
 };
@@ -489,17 +470,27 @@ export const sampleNotes: Record<string, Note[]> = {
       id: "note-1-1",
       target_company_id: "company-1",
       user_id: "user-1",
-      content: "Jennifer mentioned that Google PM interviews focus heavily on product sense and analytical thinking. She recommended practicing case studies.",
-      created_at: "2024-11-12T15:00:00Z",
-      updated_at: "2024-11-12T15:00:00Z"
+      content: "Jennifer mentioned that Google interviews focus heavily on coding and system design. She recommended practicing on LeetCode - especially medium difficulty problems.",
+      created_at: "2025-11-08T15:00:00Z",
+      updated_at: "2025-11-08T15:00:00Z"
     },
     {
       id: "note-1-2",
       target_company_id: "company-1",
       user_id: "user-1",
-      content: "Sarah Johnson (recruiter) wants to schedule a screening call next week. Need to prepare resume and practice intro.",
-      created_at: "2024-11-16T10:00:00Z",
-      updated_at: "2024-11-16T10:00:00Z"
+      content: "Phone screen scheduled for Dec 8th at 2pm EST. Need to set up quiet space and test video/audio before.",
+      created_at: "2025-12-01T16:00:00Z",
+      updated_at: "2025-12-01T16:00:00Z"
+    }
+  ],
+  "company-6": [
+    {
+      id: "note-6-1",
+      target_company_id: "company-6",
+      user_id: "user-1",
+      content: "Comcast is great for Drexel co-ops - they have a strong relationship with the school. Interview will be behavioral + technical. Research their Xfinity streaming platform.",
+      created_at: "2025-12-03T14:00:00Z",
+      updated_at: "2025-12-03T14:00:00Z"
     }
   ]
 };
@@ -507,10 +498,10 @@ export const sampleNotes: Record<string, Note[]> = {
 // Simplified UserStats for INFO 103 project (no gamification)
 export const sampleUserStats: UserStats = {
   totalApplications: 7,
-  applied: 3,
+  applied: 2,
   interviewing: 2,
   offers: 0,
   rejected: 1,
-  upcomingDeadlines: 2,
-  tasksDue: 3
+  upcomingDeadlines: 3,
+  tasksDue: 4
 };

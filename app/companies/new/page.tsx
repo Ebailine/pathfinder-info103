@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCRMStore } from "@/lib/store";
 import { TargetCompany } from "@/lib/types";
-import { ArrowLeft, Building2, MapPin, Link as LinkIcon, FileText, Tag } from "lucide-react";
+import { ArrowLeft, Building2, Briefcase, MapPin, Link as LinkIcon, FileText, Tag, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function NewCompanyPage() {
+export default function NewApplicationPage() {
   const router = useRouter();
   const addCompany = useCRMStore((state) => state.addCompany);
 
@@ -18,7 +18,8 @@ export default function NewCompanyPage() {
     location: "",
     job_description: "",
     required_skills: [] as string[],
-    skillInput: ""
+    skillInput: "",
+    application_deadline: ""
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -26,7 +27,6 @@ export default function NewCompanyPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -93,22 +93,23 @@ export default function NewCompanyPage() {
       return;
     }
 
-    const newCompany: TargetCompany = {
-      id: `company-${Date.now()}`,
-      user_id: "user-1", // In production, this would come from auth
+    const newApplication: TargetCompany = {
+      id: `app-${Date.now()}`,
+      user_id: "user-1",
       company_name: formData.company_name.trim(),
       role: formData.role.trim(),
       job_url: formData.job_url.trim() || undefined,
       location: formData.location.trim() || undefined,
       job_description: formData.job_description.trim() || undefined,
       required_skills: formData.required_skills,
+      application_deadline: formData.application_deadline || undefined,
       status: "thinking",
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
 
-    addCompany(newCompany);
-    toast.success(`${formData.company_name} added to your pipeline!`);
+    addCompany(newApplication);
+    toast.success(`${formData.company_name} added to your tracker!`);
     router.push("/dashboard");
   };
 
@@ -127,12 +128,12 @@ export default function NewCompanyPage() {
 
           <div className="flex items-center space-x-3">
             <div className="p-3 bg-blue-100 rounded-lg">
-              <Building2 className="h-8 w-8 text-blue-600" />
+              <Briefcase className="h-8 w-8 text-blue-600" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Add Target Company</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Add New Application</h1>
               <p className="text-sm text-gray-600 mt-1">
-                Add a new company to your networking pipeline
+                Track a new job or internship opportunity
               </p>
             </div>
           </div>
@@ -141,183 +142,209 @@ export default function NewCompanyPage() {
 
       {/* Form */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg border border-gray-200 p-6 space-y-6">
-          {/* Company Name */}
-          <div>
-            <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 mb-2">
-              Company Name *
-            </label>
-            <div className="relative">
-              <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                id="company_name"
-                name="company_name"
-                value={formData.company_name}
-                onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.company_name ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="e.g., Google, Meta, Amazon"
-              />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Basic Information Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Company Name */}
+              <div>
+                <label htmlFor="company_name" className="block text-sm font-medium text-gray-700 mb-2">
+                  Company Name *
+                </label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    id="company_name"
+                    name="company_name"
+                    value={formData.company_name}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.company_name ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder="Google, Amazon, etc."
+                  />
+                </div>
+                {errors.company_name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.company_name}</p>
+                )}
+              </div>
+
+              {/* Role */}
+              <div>
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
+                  Role/Position *
+                </label>
+                <div className="relative">
+                  <Briefcase className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                      errors.role ? "border-red-500" : "border-gray-300"
+                    }`}
+                    placeholder="Software Engineer Intern"
+                  />
+                </div>
+                {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role}</p>}
+              </div>
+
+              {/* Location */}
+              <div>
+                <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
+                  Location
+                </label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="New York, NY or Remote"
+                  />
+                </div>
+              </div>
+
+              {/* Application Deadline */}
+              <div>
+                <label htmlFor="application_deadline" className="block text-sm font-medium text-gray-700 mb-2">
+                  Application Deadline
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="date"
+                    id="application_deadline"
+                    name="application_deadline"
+                    value={formData.application_deadline}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
             </div>
-            {errors.company_name && (
-              <p className="mt-1 text-sm text-red-600">{errors.company_name}</p>
-            )}
-          </div>
 
-          {/* Role */}
-          <div>
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-2">
-              Role *
-            </label>
-            <input
-              type="text"
-              id="role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                errors.role ? "border-red-500" : "border-gray-300"
-              }`}
-              placeholder="e.g., Software Engineer Intern, Product Manager Intern"
-            />
-            {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role}</p>}
-          </div>
-
-          {/* Location */}
-          <div>
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-              Location
-            </label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., New York, NY or Remote"
-              />
+            {/* Job URL */}
+            <div className="mt-6">
+              <label htmlFor="job_url" className="block text-sm font-medium text-gray-700 mb-2">
+                Job Posting URL
+              </label>
+              <div className="relative">
+                <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="text"
+                  id="job_url"
+                  name="job_url"
+                  value={formData.job_url}
+                  onChange={handleChange}
+                  className={`w-full pl-10 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    errors.job_url ? "border-red-500" : "border-gray-300"
+                  }`}
+                  placeholder="https://..."
+                />
+              </div>
+              {errors.job_url && <p className="mt-1 text-sm text-red-600">{errors.job_url}</p>}
             </div>
           </div>
 
-          {/* Job URL */}
-          <div>
-            <label htmlFor="job_url" className="block text-sm font-medium text-gray-700 mb-2">
-              Job Posting URL
-            </label>
-            <div className="relative">
-              <LinkIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                id="job_url"
-                name="job_url"
-                value={formData.job_url}
-                onChange={handleChange}
-                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.job_url ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="https://..."
-              />
-            </div>
-            {errors.job_url && <p className="mt-1 text-sm text-red-600">{errors.job_url}</p>}
-            <p className="mt-1 text-xs text-gray-500">
-              Optional: Link to the job posting for easy reference
-            </p>
-          </div>
+          {/* Job Details Card */}
+          <div className="bg-white rounded-lg border border-gray-200 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Job Details</h2>
 
-          {/* Job Description */}
-          <div>
-            <label htmlFor="job_description" className="block text-sm font-medium text-gray-700 mb-2">
-              Job Description
-            </label>
-            <div className="relative">
-              <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            {/* Job Description */}
+            <div className="mb-6">
+              <label htmlFor="job_description" className="block text-sm font-medium text-gray-700 mb-2">
+                Job Description
+              </label>
               <textarea
                 id="job_description"
                 name="job_description"
                 value={formData.job_description}
                 onChange={handleChange}
                 rows={4}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                placeholder="Brief description of the role and responsibilities..."
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                placeholder="Paste or type key details about the role..."
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Add key responsibilities and requirements
+              </p>
             </div>
-            <p className="mt-1 text-xs text-gray-500">
-              Optional: Add key details about the role
-            </p>
-          </div>
 
-          {/* Required Skills */}
-          <div>
-            <label htmlFor="skillInput" className="block text-sm font-medium text-gray-700 mb-2">
-              Required Skills
-            </label>
-            <div className="flex gap-2 mb-3">
-              <div className="relative flex-1">
-                <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  type="text"
-                  id="skillInput"
-                  name="skillInput"
-                  value={formData.skillInput}
-                  onChange={handleChange}
-                  onKeyPress={handleKeyPress}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="e.g., Python, React, Data Analysis"
-                />
+            {/* Required Skills */}
+            <div>
+              <label htmlFor="skillInput" className="block text-sm font-medium text-gray-700 mb-2">
+                Required Skills
+              </label>
+              <div className="flex gap-2 mb-3">
+                <div className="relative flex-1">
+                  <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <input
+                    type="text"
+                    id="skillInput"
+                    name="skillInput"
+                    value={formData.skillInput}
+                    onChange={handleChange}
+                    onKeyPress={handleKeyPress}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Python, React, SQL..."
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddSkill}
+                  className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Add
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={handleAddSkill}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add
-              </button>
-            </div>
 
-            {/* Skills Tags */}
-            {formData.required_skills.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {formData.required_skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full"
-                  >
-                    {skill}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSkill(skill)}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
+              {formData.required_skills.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {formData.required_skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full"
                     >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-            <p className="mt-2 text-xs text-gray-500">
-              Press Enter or click Add to add a skill
-            </p>
+                      {skill}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSkill(skill)}
+                        className="ml-2 text-blue-600 hover:text-blue-800"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+              <p className="mt-2 text-xs text-gray-500">
+                Press Enter or click Add to add a skill
+              </p>
+            </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+          <div className="flex items-center justify-end space-x-4">
             <button
               type="button"
               onClick={() => router.push("/dashboard")}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Add to Pipeline
+              Add Application
             </button>
           </div>
         </form>

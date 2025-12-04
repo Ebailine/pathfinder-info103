@@ -65,6 +65,11 @@ interface CRMStore {
   setSelectedCompany: (id: string | null) => void;
   updateCompanyStatus: (id: string, status: CompanyStatus) => void;
 
+  // Connection actions
+  addConnection: (connection: Connection) => void;
+  updateConnection: (id: string, updates: Partial<Connection>) => void;
+  deleteConnection: (id: string) => void;
+
   // Outreach actions
   addOutreach: (outreach: Outreach) => void;
   updateOutreach: (id: string, updates: Partial<Outreach>) => void;
@@ -181,6 +186,21 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
       timelineEvents: updatedTimelineEvents
     };
   }),
+
+  // Connection actions
+  addConnection: (connection) => set((state) => ({
+    connections: [...state.connections, connection]
+  })),
+
+  updateConnection: (id, updates) => set((state) => ({
+    connections: state.connections.map((c) =>
+      c.id === id ? { ...c, ...updates, updated_at: new Date().toISOString() } : c
+    )
+  })),
+
+  deleteConnection: (id) => set((state) => ({
+    connections: state.connections.filter((c) => c.id !== id)
+  })),
 
   // Outreach actions
   addOutreach: (outreach) => set((state) => ({

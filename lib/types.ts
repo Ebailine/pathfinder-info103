@@ -91,6 +91,7 @@ export interface TargetCompany {
   job_description?: string;
   required_skills: string[];
   status: CompanyStatus;
+  application_deadline?: string;
   created_at: string;
   updated_at: string;
 }

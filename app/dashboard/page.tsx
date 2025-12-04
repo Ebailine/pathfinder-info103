@@ -123,9 +123,9 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">PathFinder CRM</h1>
+              <h1 className="text-2xl font-bold text-gray-900">PathFinder</h1>
               <p className="text-sm text-gray-600 mt-1">
-                Manage your warm introduction pipeline
+                Track your job and internship applications
               </p>
             </div>
             <button
@@ -133,7 +133,7 @@ export default function DashboardPage() {
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
             >
               <Plus className="h-5 w-5" />
-              <span>Add Company</span>
+              <span>Add Application</span>
             </button>
           </div>
         </div>
@@ -261,12 +261,12 @@ export default function DashboardPage() {
                     <Search className="h-12 w-12 mx-auto" />
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    No companies found
+                    No applications found
                   </h3>
                   <p className="text-gray-600 mb-4">
                     {searchQuery || statusFilter !== "all"
                       ? "Try adjusting your filters or search query"
-                      : "Get started by adding your first target company"}
+                      : "Get started by adding your first application"}
                   </p>
                   {!searchQuery && statusFilter === "all" && (
                     <button
@@ -274,7 +274,7 @@ export default function DashboardPage() {
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center space-x-2"
                     >
                       <Plus className="h-5 w-5" />
-                      <span>Add Your First Company</span>
+                      <span>Add Your First Application</span>
                     </button>
                   )}
                 </div>

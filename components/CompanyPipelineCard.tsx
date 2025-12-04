@@ -17,7 +17,6 @@ import {
   Edit,
   Trash2,
   CheckCircle2,
-  ArrowRight,
   Clock
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -170,17 +169,12 @@ export function CompanyPipelineCard({ company, connections = [], outreach = [] }
           </span>
         </div>
 
-        {/* Connection Path */}
+        {/* Contact at Company */}
         {primaryConnection && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-xs font-medium text-gray-600 mb-2">CONNECTION PATH</p>
-            <div className="flex items-center text-sm">
-              <span className="text-gray-900 font-medium">You</span>
-              <ArrowRight className="h-4 w-4 mx-2 text-gray-400" />
-              <span className="text-blue-600 font-medium">{primaryConnection.full_name}</span>
-              <ArrowRight className="h-4 w-4 mx-2 text-gray-400" />
-              <span className="text-gray-900 font-medium">Hiring Manager</span>
-            </div>
+          <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+            <p className="text-xs font-medium text-blue-700">
+              You know {primaryConnection.full_name} at this company
+            </p>
           </div>
         )}
 
