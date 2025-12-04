@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useCRMStore } from "@/lib/store";
 import { formatDate, isOverdue, isDueToday } from "@/lib/utils";
 import {
-  ArrowLeft,
   Bell,
   BellRing,
   Calendar,
@@ -14,7 +13,8 @@ import {
   Clock,
   Trash2,
   Plus,
-  X
+  X,
+  Sparkles
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Reminder, ReminderType } from "@/lib/types";
@@ -52,19 +52,19 @@ export default function RemindersPage() {
 
   const handleComplete = (id: string) => {
     completeReminder(id);
-    toast.success("Reminder completed");
+    toast.success("Task completed!");
   };
 
   const handleDelete = (id: string, message: string) => {
-    if (confirm(`Delete reminder: "${message}"?`)) {
+    if (confirm(`Delete task: "${message}"?`)) {
       deleteReminder(id);
-      toast.success("Reminder deleted");
+      toast.success("Task deleted");
     }
   };
 
   const handleCreateReminder = () => {
     if (!newReminder.message.trim()) {
-      toast.error("Please enter a reminder message");
+      toast.error("Please enter a task message");
       return;
     }
     if (!newReminder.reminder_date) {
@@ -86,7 +86,7 @@ export default function RemindersPage() {
     };
 
     addReminder(reminder);
-    toast.success("Reminder created");
+    toast.success("Task created!");
     setShowModal(false);
     setNewReminder({
       message: "",
@@ -105,65 +105,64 @@ export default function RemindersPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Page Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-blue-100 rounded-lg">
-              <Bell className="h-8 w-8 text-blue-600" />
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-blue-50/30">
+      {/* Page Header */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Tasks & Reminders</h1>
-              <p className="text-sm text-gray-600 mt-1">
-                {activeReminders.length} active task{activeReminders.length !== 1 ? "s" : ""}
+              <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
+              <p className="text-gray-500 text-sm mt-1">
+                {activeReminders.length} active task{activeReminders.length !== 1 ? "s" : ""} to complete
               </p>
             </div>
+            <button
+              onClick={() => setShowModal(true)}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:-translate-y-0.5"
+            >
+              <Plus className="h-4 w-4" />
+              Add Task
+            </button>
           </div>
-
-          <button
-            onClick={() => setShowModal(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 shadow-md"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Add Task</span>
-          </button>
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg border-2 border-red-200 p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 group">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-red-600 uppercase">Overdue</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{overdueReminders.length}</p>
+                <p className="text-sm font-medium text-red-600 uppercase tracking-wide">Overdue</p>
+                <p className="text-4xl font-bold text-gray-900 mt-2">{overdueReminders.length}</p>
               </div>
-              <div className="p-3 bg-red-100 rounded-lg">
-                <AlertCircle className="h-8 w-8 text-red-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/20 group-hover:shadow-red-500/30 transition-shadow">
+                <AlertCircle className="h-7 w-7 text-white" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg border-2 border-orange-200 p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 group">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-orange-600 uppercase">Today</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{todayReminders.length}</p>
+                <p className="text-sm font-medium text-amber-600 uppercase tracking-wide">Today</p>
+                <p className="text-4xl font-bold text-gray-900 mt-2">{todayReminders.length}</p>
               </div>
-              <div className="p-3 bg-orange-100 rounded-lg">
-                <BellRing className="h-8 w-8 text-orange-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/30 transition-shadow">
+                <BellRing className="h-7 w-7 text-white" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg border-2 border-blue-200 p-6">
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 group">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-blue-600 uppercase">Upcoming</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{upcomingReminders.length}</p>
+                <p className="text-sm font-medium text-blue-600 uppercase tracking-wide">Upcoming</p>
+                <p className="text-4xl font-bold text-gray-900 mt-2">{upcomingReminders.length}</p>
               </div>
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Calendar className="h-8 w-8 text-blue-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/30 transition-shadow">
+                <Calendar className="h-7 w-7 text-white" />
               </div>
             </div>
           </div>
@@ -173,11 +172,16 @@ export default function RemindersPage() {
         <div className="space-y-6">
           {/* Overdue */}
           {overdueReminders.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <AlertCircle className="h-6 w-6 mr-2 text-red-600" />
-                Overdue ({overdueReminders.length})
-              </h2>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-red-500 to-rose-600 shadow-lg shadow-red-500/20">
+                  <AlertCircle className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-gray-900">Overdue</h2>
+                  <p className="text-sm text-red-600">{overdueReminders.length} task{overdueReminders.length !== 1 ? "s" : ""} need attention</p>
+                </div>
+              </div>
               <div className="space-y-3">
                 {overdueReminders.map((reminder) => (
                   <ReminderCard
@@ -194,11 +198,16 @@ export default function RemindersPage() {
 
           {/* Today */}
           {todayReminders.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <BellRing className="h-6 w-6 mr-2 text-orange-600" />
-                Today ({todayReminders.length})
-              </h2>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20">
+                  <BellRing className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-gray-900">Today</h2>
+                  <p className="text-sm text-amber-600">{todayReminders.length} task{todayReminders.length !== 1 ? "s" : ""} due today</p>
+                </div>
+              </div>
               <div className="space-y-3">
                 {todayReminders.map((reminder) => (
                   <ReminderCard
@@ -215,11 +224,16 @@ export default function RemindersPage() {
 
           {/* Upcoming */}
           {upcomingReminders.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <Calendar className="h-6 w-6 mr-2 text-blue-600" />
-                Upcoming ({upcomingReminders.length})
-              </h2>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
+                  <Calendar className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-gray-900">Upcoming</h2>
+                  <p className="text-sm text-blue-600">{upcomingReminders.length} task{upcomingReminders.length !== 1 ? "s" : ""} scheduled</p>
+                </div>
+              </div>
               <div className="space-y-3">
                 {upcomingReminders.map((reminder) => (
                   <ReminderCard
@@ -236,31 +250,38 @@ export default function RemindersPage() {
 
           {/* No active reminders */}
           {activeReminders.length === 0 && (
-            <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-              <Clock className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No active reminders
+            <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-16 text-center">
+              <div className="w-20 h-20 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="h-10 w-10 text-gray-300" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                All caught up!
               </h3>
-              <p className="text-gray-600 mb-4">
-                All caught up! Your reminders will appear here.
+              <p className="text-gray-500 mb-6">
+                You don't have any active tasks. Great job staying organized!
               </p>
               <button
                 onClick={() => setShowModal(true)}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
               >
-                <Plus className="h-5 w-5 mr-2" />
-                Create Your First Reminder
+                <Plus className="h-5 w-5" />
+                Create Your First Task
               </button>
             </div>
           )}
 
           {/* Completed Reminders */}
           {completedReminders.length > 0 && (
-            <div className="bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                <CheckCircle2 className="h-6 w-6 mr-2 text-green-600" />
-                Completed ({completedReminders.length})
-              </h2>
+            <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20">
+                  <CheckCircle2 className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <h2 className="font-bold text-gray-900">Completed</h2>
+                  <p className="text-sm text-emerald-600">{completedReminders.length} task{completedReminders.length !== 1 ? "s" : ""} done</p>
+                </div>
+              </div>
               <div className="space-y-3">
                 {completedReminders.slice(0, 5).map((reminder) => (
                   <ReminderCard
@@ -273,8 +294,8 @@ export default function RemindersPage() {
                 ))}
               </div>
               {completedReminders.length > 5 && (
-                <p className="text-sm text-gray-500 text-center mt-4">
-                  Showing 5 of {completedReminders.length} completed reminders
+                <p className="text-sm text-gray-500 text-center mt-5 pt-4 border-t border-gray-100">
+                  Showing 5 of {completedReminders.length} completed tasks
                 </p>
               )}
             </div>
@@ -284,28 +305,33 @@ export default function RemindersPage() {
 
       {/* Add Reminder Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Add Reminder</h2>
-              <button
-                onClick={() => setShowModal(false)}
-                className="p-1 hover:bg-gray-100 rounded transition-colors"
-              >
-                <X className="h-5 w-5 text-gray-500" />
-              </button>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Add Task</h2>
+                  <p className="text-sm text-gray-500 mt-1">Schedule a new task or reminder</p>
+                </div>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                >
+                  <X className="h-5 w-5 text-gray-500" />
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="p-6 space-y-5">
               {/* Reminder Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Type
                 </label>
                 <select
                   value={newReminder.reminder_type}
                   onChange={(e) => setNewReminder({ ...newReminder, reminder_type: e.target.value as ReminderType })}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                 >
                   {reminderTypes.map((type) => (
                     <option key={type.value} value={type.value}>
@@ -317,14 +343,14 @@ export default function RemindersPage() {
 
               {/* Message */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Message *
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Task Description *
                 </label>
                 <textarea
                   value={newReminder.message}
                   onChange={(e) => setNewReminder({ ...newReminder, message: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none placeholder:text-gray-400"
                   placeholder="What do you need to remember?"
                 />
               </div>
@@ -332,25 +358,25 @@ export default function RemindersPage() {
               {/* Date and Time */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Date *
                   </label>
                   <input
                     type="date"
                     value={newReminder.reminder_date}
                     onChange={(e) => setNewReminder({ ...newReminder, reminder_date: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Time
                   </label>
                   <input
                     type="time"
                     value={newReminder.reminder_time}
                     onChange={(e) => setNewReminder({ ...newReminder, reminder_time: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                   />
                 </div>
               </div>
@@ -358,13 +384,13 @@ export default function RemindersPage() {
               {/* Related Application (Optional) */}
               {companies.length > 0 && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Related Application (Optional)
                   </label>
                   <select
                     value={newReminder.target_company_id}
                     onChange={(e) => setNewReminder({ ...newReminder, target_company_id: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                   >
                     <option value="">None</option>
                     {companies.map((company) => (
@@ -378,18 +404,18 @@ export default function RemindersPage() {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-end space-x-3 mt-6">
+            <div className="p-6 border-t border-gray-100 flex justify-end gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-5 py-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateReminder}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg shadow-blue-500/25"
               >
-                Create Reminder
+                Create Task
               </button>
             </div>
           </div>
@@ -407,11 +433,11 @@ interface ReminderCardProps {
 }
 
 function ReminderCard({ reminder, variant, onComplete, onDelete }: ReminderCardProps) {
-  const borderColor = {
-    overdue: "border-l-red-500 bg-red-50",
-    today: "border-l-orange-500 bg-orange-50",
-    upcoming: "border-l-blue-500 bg-blue-50",
-    completed: "border-l-green-500 bg-green-50 opacity-75"
+  const variantStyles = {
+    overdue: "bg-gradient-to-r from-red-50 to-rose-50 border-red-100 hover:border-red-200",
+    today: "bg-gradient-to-r from-amber-50 to-orange-50 border-amber-100 hover:border-amber-200",
+    upcoming: "bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100 hover:border-blue-200",
+    completed: "bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-100 opacity-75"
   }[variant];
 
   const typeLabels: Record<string, string> = {
@@ -421,41 +447,51 @@ function ReminderCard({ reminder, variant, onComplete, onDelete }: ReminderCardP
     send_thank_you: "Send Thank You"
   };
 
+  const typeColors: Record<string, string> = {
+    follow_up: "bg-blue-100 text-blue-700 border-blue-200",
+    call_prep: "bg-violet-100 text-violet-700 border-violet-200",
+    check_response: "bg-amber-100 text-amber-700 border-amber-200",
+    send_thank_you: "bg-emerald-100 text-emerald-700 border-emerald-200"
+  };
+
   const typeIcons: Record<string, JSX.Element> = {
-    follow_up: <Bell className="h-4 w-4" />,
-    call_prep: <Calendar className="h-4 w-4" />,
-    check_response: <Clock className="h-4 w-4" />,
-    send_thank_you: <CheckCircle2 className="h-4 w-4" />
+    follow_up: <Bell className="h-3.5 w-3.5" />,
+    call_prep: <Calendar className="h-3.5 w-3.5" />,
+    check_response: <Clock className="h-3.5 w-3.5" />,
+    send_thank_you: <CheckCircle2 className="h-3.5 w-3.5" />
   };
 
   return (
-    <div className={`p-4 rounded-lg border-l-4 ${borderColor}`}>
+    <div className={`p-4 rounded-xl border transition-all duration-200 ${variantStyles}`}>
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center space-x-2 mb-2">
-            <span className="inline-flex items-center px-2 py-1 bg-white rounded text-xs font-medium text-gray-700 border border-gray-200">
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ${typeColors[reminder.reminder_type] || "bg-gray-100 text-gray-700 border-gray-200"}`}>
               {typeIcons[reminder.reminder_type]}
-              <span className="ml-1">{typeLabels[reminder.reminder_type] || reminder.reminder_type}</span>
+              {typeLabels[reminder.reminder_type] || reminder.reminder_type}
             </span>
             {variant === "overdue" && (
-              <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-800 rounded text-xs font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold border border-red-200">
+                <AlertCircle className="h-3 w-3" />
                 Overdue
               </span>
             )}
           </div>
-          <p className="text-sm font-medium text-gray-900 mb-1">{reminder.message}</p>
-          <p className="text-xs text-gray-600">
+          <p className={`text-sm font-semibold text-gray-900 mb-1 ${variant === "completed" ? "line-through text-gray-500" : ""}`}>
+            {reminder.message}
+          </p>
+          <p className="text-xs text-gray-500 font-medium">
             {variant === "completed" && reminder.completed_at
               ? `Completed ${formatDate(reminder.completed_at, "MMM d, h:mm a")}`
               : formatDate(reminder.reminder_date, "MMM d, h:mm a")}
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 ml-4">
+        <div className="flex items-center gap-1 ml-4">
           {!reminder.completed && (
             <button
               onClick={() => onComplete(reminder.id)}
-              className="p-2 text-gray-600 hover:bg-white rounded transition-colors"
+              className="p-2.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all duration-200"
               title="Mark as complete"
             >
               <CheckCircle2 className="h-5 w-5" />
@@ -463,7 +499,7 @@ function ReminderCard({ reminder, variant, onComplete, onDelete }: ReminderCardP
           )}
           <button
             onClick={() => onDelete(reminder.id, reminder.message)}
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-white rounded transition-colors"
+            className="p-2.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
             title="Delete"
           >
             <Trash2 className="h-5 w-5" />
