@@ -17,7 +17,23 @@ export type ReminderType =
   | "follow_up"
   | "call_prep"
   | "check_response"
-  | "send_thank_you";
+  | "send_thank_you"
+  | "apply"
+  | "other";
+
+// NEW: Interaction types for logging contact interactions
+export type InteractionType =
+  | "email_sent"
+  | "email_received"
+  | "linkedin_message"
+  | "phone_call"
+  | "video_call"
+  | "coffee_chat"
+  | "informational_interview"
+  | "referral_received"
+  | "introduction_made"
+  | "meeting"
+  | "other";
 
 import { CareerStage, OpportunityType } from "./career-stages";
 
@@ -32,7 +48,7 @@ export interface User {
   career_stage: CareerStage;
   school: string;
   major?: string;
-  degree_type?: string; // e.g., "BS", "JD", "MD", "MBA", "PhD"
+  degree_type?: string;
   graduation_year?: number;
 
   // Location & Contact
@@ -71,14 +87,33 @@ export interface Connection {
   same_school: boolean;
   same_major: boolean;
   intro_likelihood_score: number;
-  // Additional contact fields for INFO 103 project
+  // Contact fields
   email?: string;
   phone?: string;
   notes?: string;
   how_you_know?: string;
   source?: string;
+  // NEW: Link to applications (many-to-many relationship)
+  linked_application_ids?: string[];
+  // NEW: Last interaction tracking
+  last_contacted?: string;
   created_at: string;
   updated_at: string;
+}
+
+// NEW: Interaction interface for logging contact interactions
+export interface Interaction {
+  id: string;
+  user_id: string;
+  connection_id: string;
+  target_company_id?: string; // Optional link to application
+  type: InteractionType;
+  title: string;
+  description: string;
+  date: string;
+  follow_up_needed?: boolean;
+  follow_up_date?: string;
+  created_at: string;
 }
 
 export interface TargetCompany {
@@ -92,6 +127,8 @@ export interface TargetCompany {
   required_skills: string[];
   status: CompanyStatus;
   application_deadline?: string;
+  // NEW: Link to contacts for this application
+  linked_contact_ids?: string[];
   created_at: string;
   updated_at: string;
 }
@@ -120,6 +157,7 @@ export interface Reminder {
   user_id: string;
   outreach_id?: string;
   target_company_id?: string;
+  connection_id?: string; // NEW: Link to contact
   reminder_type: ReminderType;
   reminder_date: string;
   message: string;
@@ -130,7 +168,7 @@ export interface Reminder {
 
 export interface TimelineEvent {
   id: string;
-  type: "message_sent" | "response_received" | "call_scheduled" | "intro_made" | "note_added" | "status_changed";
+  type: "message_sent" | "response_received" | "call_scheduled" | "intro_made" | "note_added" | "status_changed" | "interaction" | "task_completed" | "application_submitted";
   title: string;
   description: string;
   date: string;
@@ -146,7 +184,7 @@ export interface Note {
   updated_at: string;
 }
 
-// Simplified UserStats for INFO 103 project (no gamification)
+// Simplified UserStats for INFO 103 project
 export interface UserStats {
   totalApplications: number;
   applied: number;
@@ -156,3 +194,18 @@ export interface UserStats {
   upcomingDeadlines: number;
   tasksDue: number;
 }
+
+// Helper type for interaction type labels
+export const InteractionTypeLabels: Record<InteractionType, string> = {
+  email_sent: "Email Sent",
+  email_received: "Email Received",
+  linkedin_message: "LinkedIn Message",
+  phone_call: "Phone Call",
+  video_call: "Video Call",
+  coffee_chat: "Coffee Chat",
+  informational_interview: "Informational Interview",
+  referral_received: "Referral Received",
+  introduction_made: "Introduction Made",
+  meeting: "Meeting",
+  other: "Other"
+};

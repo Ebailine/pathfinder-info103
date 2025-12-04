@@ -8,7 +8,8 @@ import {
   TimelineEvent,
   Note,
   UserStats,
-  CompanyStatus
+  CompanyStatus,
+  Interaction
 } from './types';
 import {
   sampleUser,
@@ -18,7 +19,8 @@ import {
   sampleReminders,
   sampleTimelineEvents,
   sampleNotes,
-  sampleUserStats
+  sampleUserStats,
+  sampleInteractions
 } from './sample-data';
 
 interface CRMStore {
@@ -32,6 +34,9 @@ interface CRMStore {
 
   // Connections
   connections: Connection[];
+
+  // Interactions (NEW)
+  interactions: Interaction[];
 
   // Outreach
   outreach: Outreach[];
@@ -48,7 +53,7 @@ interface CRMStore {
   // Filters & Search
   statusFilter: CompanyStatus | 'all';
   searchQuery: string;
-  sortBy: 'recent' | 'active' | 'priority' | 'interviews';
+  sortBy: 'recent' | 'active' | 'priority' | 'deadline';
 
   // UI State
   selectedCompanies: string[];
@@ -57,6 +62,7 @@ interface CRMStore {
   // Actions
   setUser: (user: User) => void;
   updateStats: (stats: Partial<UserStats>) => void;
+  recalculateStats: () => void;
 
   // Company actions
   addCompany: (company: TargetCompany) => void;
@@ -64,11 +70,20 @@ interface CRMStore {
   deleteCompany: (id: string) => void;
   setSelectedCompany: (id: string | null) => void;
   updateCompanyStatus: (id: string, status: CompanyStatus) => void;
+  linkContactToCompany: (companyId: string, contactId: string) => void;
+  unlinkContactFromCompany: (companyId: string, contactId: string) => void;
 
   // Connection actions
   addConnection: (connection: Connection) => void;
   updateConnection: (id: string, updates: Partial<Connection>) => void;
   deleteConnection: (id: string) => void;
+
+  // Interaction actions (NEW)
+  addInteraction: (interaction: Interaction) => void;
+  updateInteraction: (id: string, updates: Partial<Interaction>) => void;
+  deleteInteraction: (id: string) => void;
+  getInteractionsForContact: (contactId: string) => Interaction[];
+  getInteractionsForCompany: (companyId: string) => Interaction[];
 
   // Outreach actions
   addOutreach: (outreach: Outreach) => void;
@@ -92,7 +107,7 @@ interface CRMStore {
   // Filter & Search actions
   setStatusFilter: (status: CompanyStatus | 'all') => void;
   setSearchQuery: (query: string) => void;
-  setSortBy: (sortBy: 'recent' | 'active' | 'priority' | 'interviews') => void;
+  setSortBy: (sortBy: 'recent' | 'active' | 'priority' | 'deadline') => void;
 
   // Bulk actions
   toggleSelectCompany: (id: string) => void;
@@ -106,7 +121,7 @@ interface CRMStore {
 }
 
 export const useCRMStore = create<CRMStore>((set, get) => ({
-  // Initial state - simplified for INFO 103 project
+  // Initial state
   user: null,
   stats: {
     totalApplications: 0,
@@ -120,6 +135,7 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
   companies: [],
   selectedCompanyId: null,
   connections: [],
+  interactions: [],
   outreach: [],
   reminders: [],
   timelineEvents: {},
@@ -136,14 +152,36 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
     stats: { ...state.stats, ...stats }
   })),
 
+  recalculateStats: () => set((state) => {
+    const companies = state.companies;
+    const reminders = state.reminders;
+    const now = new Date();
+    const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+    return {
+      stats: {
+        totalApplications: companies.length,
+        applied: companies.filter(c => c.status === 'applied').length,
+        interviewing: companies.filter(c => c.status === 'interviewing').length,
+        offers: companies.filter(c => c.status === 'offer').length,
+        rejected: companies.filter(c => c.status === 'rejected').length,
+        upcomingDeadlines: companies.filter(c =>
+          c.application_deadline &&
+          new Date(c.application_deadline) <= weekFromNow &&
+          new Date(c.application_deadline) >= now
+        ).length,
+        tasksDue: reminders.filter(r => !r.completed && new Date(r.reminder_date) <= weekFromNow).length
+      }
+    };
+  }),
+
   // Company actions
-  addCompany: (company) => set((state) => ({
-    companies: [...state.companies, company],
-    stats: {
-      ...state.stats,
-      totalApplications: state.stats.totalApplications + 1
-    }
-  })),
+  addCompany: (company) => {
+    set((state) => ({
+      companies: [...state.companies, company]
+    }));
+    get().recalculateStats();
+  },
 
   updateCompany: (id, updates) => set((state) => ({
     companies: state.companies.map((c) =>
@@ -151,41 +189,66 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
     )
   })),
 
-  deleteCompany: (id) => set((state) => ({
-    companies: state.companies.filter((c) => c.id !== id),
-    stats: {
-      ...state.stats,
-      totalApplications: Math.max(0, state.stats.totalApplications - 1)
-    }
-  })),
+  deleteCompany: (id) => {
+    set((state) => ({
+      companies: state.companies.filter((c) => c.id !== id)
+    }));
+    get().recalculateStats();
+  },
 
   setSelectedCompany: (id) => set({ selectedCompanyId: id }),
 
-  updateCompanyStatus: (id, status) => set((state) => {
-    const company = state.companies.find(c => c.id === id);
-    if (!company) return state;
+  updateCompanyStatus: (id, status) => {
+    set((state) => {
+      const company = state.companies.find(c => c.id === id);
+      if (!company) return state;
 
-    // Add timeline event
-    const newEvent: TimelineEvent = {
-      id: `event-${Date.now()}`,
-      type: 'status_changed',
-      title: `Status updated to ${status.replace(/_/g, ' ')}`,
-      description: `Company status changed from ${company.status.replace(/_/g, ' ')} to ${status.replace(/_/g, ' ')}`,
-      date: new Date().toISOString()
-    };
+      const newEvent: TimelineEvent = {
+        id: `event-${Date.now()}`,
+        type: 'status_changed',
+        title: `Status updated to ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+        description: `Application status changed from "${company.status}" to "${status}"`,
+        date: new Date().toISOString()
+      };
 
-    const updatedTimelineEvents = {
-      ...state.timelineEvents,
-      [id]: [...(state.timelineEvents[id] || []), newEvent]
-    };
+      return {
+        companies: state.companies.map((c) =>
+          c.id === id ? { ...c, status, updated_at: new Date().toISOString() } : c
+        ),
+        timelineEvents: {
+          ...state.timelineEvents,
+          [id]: [...(state.timelineEvents[id] || []), newEvent]
+        }
+      };
+    });
+    get().recalculateStats();
+  },
 
-    return {
-      companies: state.companies.map((c) =>
-        c.id === id ? { ...c, status, updated_at: new Date().toISOString() } : c
-      ),
-      timelineEvents: updatedTimelineEvents
-    };
-  }),
+  linkContactToCompany: (companyId, contactId) => set((state) => ({
+    companies: state.companies.map((c) =>
+      c.id === companyId
+        ? { ...c, linked_contact_ids: [...(c.linked_contact_ids || []), contactId], updated_at: new Date().toISOString() }
+        : c
+    ),
+    connections: state.connections.map((conn) =>
+      conn.id === contactId
+        ? { ...conn, linked_application_ids: [...(conn.linked_application_ids || []), companyId], updated_at: new Date().toISOString() }
+        : conn
+    )
+  })),
+
+  unlinkContactFromCompany: (companyId, contactId) => set((state) => ({
+    companies: state.companies.map((c) =>
+      c.id === companyId
+        ? { ...c, linked_contact_ids: (c.linked_contact_ids || []).filter(id => id !== contactId), updated_at: new Date().toISOString() }
+        : c
+    ),
+    connections: state.connections.map((conn) =>
+      conn.id === contactId
+        ? { ...conn, linked_application_ids: (conn.linked_application_ids || []).filter(id => id !== companyId), updated_at: new Date().toISOString() }
+        : conn
+    )
+  })),
 
   // Connection actions
   addConnection: (connection) => set((state) => ({
@@ -199,8 +262,64 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
   })),
 
   deleteConnection: (id) => set((state) => ({
-    connections: state.connections.filter((c) => c.id !== id)
+    connections: state.connections.filter((c) => c.id !== id),
+    interactions: state.interactions.filter((i) => i.connection_id !== id)
   })),
+
+  // Interaction actions
+  addInteraction: (interaction) => set((state) => {
+    // Also update last_contacted on the connection
+    const updatedConnections = state.connections.map((c) =>
+      c.id === interaction.connection_id
+        ? { ...c, last_contacted: interaction.date, updated_at: new Date().toISOString() }
+        : c
+    );
+
+    // Add timeline event if linked to a company
+    let updatedTimelineEvents = state.timelineEvents;
+    if (interaction.target_company_id) {
+      const newEvent: TimelineEvent = {
+        id: `event-${Date.now()}`,
+        type: 'interaction',
+        title: interaction.title,
+        description: interaction.description,
+        date: interaction.date,
+        metadata: { interaction_id: interaction.id, connection_id: interaction.connection_id }
+      };
+      updatedTimelineEvents = {
+        ...state.timelineEvents,
+        [interaction.target_company_id]: [...(state.timelineEvents[interaction.target_company_id] || []), newEvent]
+      };
+    }
+
+    return {
+      interactions: [...state.interactions, interaction],
+      connections: updatedConnections,
+      timelineEvents: updatedTimelineEvents
+    };
+  }),
+
+  updateInteraction: (id, updates) => set((state) => ({
+    interactions: state.interactions.map((i) =>
+      i.id === id ? { ...i, ...updates } : i
+    )
+  })),
+
+  deleteInteraction: (id) => set((state) => ({
+    interactions: state.interactions.filter((i) => i.id !== id)
+  })),
+
+  getInteractionsForContact: (contactId) => {
+    return get().interactions
+      .filter(i => i.connection_id === contactId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
+
+  getInteractionsForCompany: (companyId) => {
+    return get().interactions
+      .filter(i => i.target_company_id === companyId)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  },
 
   // Outreach actions
   addOutreach: (outreach) => set((state) => ({
@@ -218,9 +337,12 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
   })),
 
   // Reminder actions
-  addReminder: (reminder) => set((state) => ({
-    reminders: [...state.reminders, reminder]
-  })),
+  addReminder: (reminder) => {
+    set((state) => ({
+      reminders: [...state.reminders, reminder]
+    }));
+    get().recalculateStats();
+  },
 
   updateReminder: (id, updates) => set((state) => ({
     reminders: state.reminders.map((r) =>
@@ -228,15 +350,21 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
     )
   })),
 
-  completeReminder: (id) => set((state) => ({
-    reminders: state.reminders.map((r) =>
-      r.id === id ? { ...r, completed: true, completed_at: new Date().toISOString() } : r
-    )
-  })),
+  completeReminder: (id) => {
+    set((state) => ({
+      reminders: state.reminders.map((r) =>
+        r.id === id ? { ...r, completed: true, completed_at: new Date().toISOString() } : r
+      )
+    }));
+    get().recalculateStats();
+  },
 
-  deleteReminder: (id) => set((state) => ({
-    reminders: state.reminders.filter((r) => r.id !== id)
-  })),
+  deleteReminder: (id) => {
+    set((state) => ({
+      reminders: state.reminders.filter((r) => r.id !== id)
+    }));
+    get().recalculateStats();
+  },
 
   // Timeline actions
   addTimelineEvent: (companyId, event) => set((state) => ({
@@ -288,33 +416,38 @@ export const useCRMStore = create<CRMStore>((set, get) => ({
 
   clearSelection: () => set({ selectedCompanies: [] }),
 
-  bulkUpdateStatus: (status) => set((state) => ({
-    companies: state.companies.map((c) =>
-      state.selectedCompanies.includes(c.id)
-        ? { ...c, status, updated_at: new Date().toISOString() }
-        : c
-    ),
-    selectedCompanies: []
-  })),
+  bulkUpdateStatus: (status) => {
+    set((state) => ({
+      companies: state.companies.map((c) =>
+        state.selectedCompanies.includes(c.id)
+          ? { ...c, status, updated_at: new Date().toISOString() }
+          : c
+      ),
+      selectedCompanies: []
+    }));
+    get().recalculateStats();
+  },
 
-  bulkDelete: () => set((state) => ({
-    companies: state.companies.filter((c) => !state.selectedCompanies.includes(c.id)),
-    selectedCompanies: [],
-    stats: {
-      ...state.stats,
-      totalApplications: Math.max(0, state.stats.totalApplications - state.selectedCompanies.length)
-    }
-  })),
+  bulkDelete: () => {
+    set((state) => ({
+      companies: state.companies.filter((c) => !state.selectedCompanies.includes(c.id)),
+      selectedCompanies: []
+    }));
+    get().recalculateStats();
+  },
 
   // Initialize with sample data
-  initializeSampleData: () => set({
-    user: sampleUser,
-    stats: sampleUserStats,
-    companies: sampleTargetCompanies,
-    connections: sampleConnections,
-    outreach: sampleOutreach,
-    reminders: sampleReminders,
-    timelineEvents: sampleTimelineEvents,
-    notes: sampleNotes
-  })
+  initializeSampleData: () => {
+    set({
+      user: sampleUser,
+      stats: sampleUserStats,
+      companies: sampleTargetCompanies,
+      connections: sampleConnections,
+      interactions: sampleInteractions,
+      outreach: sampleOutreach,
+      reminders: sampleReminders,
+      timelineEvents: sampleTimelineEvents,
+      notes: sampleNotes
+    });
+  }
 }));
